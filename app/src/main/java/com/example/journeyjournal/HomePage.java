@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,11 +22,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class HomePage extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "HomePage";
-    private static final String KEY_EMAIL = "email";
+
     private static final String KEY_FIRSTNAME = "firstName";
 
-    private TextView data;
-    private Button signOut;
+    private ListView journeys;
+
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -41,11 +42,17 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
 
-        data = (TextView) findViewById(R.id.textView);
-        signOut = (Button) findViewById(R.id.signOut);
-        signOut.setOnClickListener(this);
 
-        loadData();
+        Button signOut = (Button) findViewById(R.id.signOut);
+        Button add_journey = (Button) findViewById(R.id.add_journey);
+        signOut.setOnClickListener(this);
+        add_journey.setOnClickListener(this);
+
+        journeys = (ListView) findViewById(R.id.list_journeys);
+
+
+
+        loadName();
 
     }
 
@@ -55,23 +62,28 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.signOut:
-                Intent intent = new Intent(HomePage.this, MainActivity.class);
+                Intent intent_signOut = new Intent(HomePage.this, MainActivity.class);
                 FirebaseAuth.getInstance().signOut();
-                startActivity(intent);
+                startActivity(intent_signOut);
+                break;
+            case R.id.add_journey:
+                Intent intent_add = new Intent(HomePage.this, AddJourney.class);
+                startActivity(intent_add);
+                break;
         }
     }
 
 
-    private void loadData() {
+    private void loadName() {
         docRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if(documentSnapshot.exists()){
                             String firstName = documentSnapshot.getString(KEY_FIRSTNAME);
-                            String email = documentSnapshot.getString(KEY_EMAIL);
 
-                            data.setText("Hello " + firstName + "\n" + "Email: " + email);
+                            //Todo: add welcome and name
+
 
                         }
                         else {

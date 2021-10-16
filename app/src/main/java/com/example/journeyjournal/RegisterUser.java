@@ -128,7 +128,6 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
                        //Add user data to the database to his specific ID
                        Map<String, Object> user = new HashMap<>();
                        user.put("firstName", firstName);
-                       user.put("email", email);
 
                        documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                            @Override
