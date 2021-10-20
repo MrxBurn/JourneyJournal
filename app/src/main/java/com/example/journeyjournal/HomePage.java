@@ -7,14 +7,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,7 +31,7 @@ import java.util.Map;
 
 public class HomePage extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String TAG = "HomePage";
+
 
     private static final String KEY_FIRSTNAME = "firstName";
 
@@ -35,6 +39,11 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
     private DocumentReference docRef = db.collection("users").document(userID);
+
+
+    TextView textView;
+
+
 
 
     ListView listView;
@@ -59,10 +68,14 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         dataArrayList = new ArrayList<>();
 
         loadDataInListView();
-        loadName();
+       // loadName();
+
+
+        textView = findViewById(R.id.textView);
 
 
     }
+
 
 
 
@@ -85,7 +98,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     }
 
 
-    private void loadName() {
+  /*  private void loadName() {
         docRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -111,13 +124,15 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 });
 
 
-    }
+    }*/
 
     private void loadDataInListView() {
         db.collection("users").document(userID).collection("journeys").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+
                         if(!queryDocumentSnapshots.isEmpty()){
                             List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
 
@@ -125,15 +140,22 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                                 Data data = d.toObject(Data.class);
 
                                 dataArrayList.add(data);
+
+                                Log.d( "JourneyData", "ID " + d.getId() + " " + d.getData());
+                                //Todo: Try and assign ID to each item in ListView
                             }
 
                             Adapter adapter = new Adapter(HomePage.this, dataArrayList);
 
                             listView.setAdapter(adapter);
 
+
+
                         } else {
                             Toast.makeText(HomePage.this, "No data found in database", Toast.LENGTH_SHORT).show();
                         }
+
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -142,7 +164,10 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                         Toast.makeText(HomePage.this, "Fail to load data..", Toast.LENGTH_SHORT).show();
                     }
                 });
+
+
     }
+
 
 
 

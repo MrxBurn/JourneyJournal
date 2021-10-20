@@ -5,11 +5,16 @@ public class Data {
     private String imgUrl;
 
 
+
+    private String journeyID;
+
+
     public Data(){}
 
-    public Data(String title, String imgUrl) {
+    public Data(String title, String imgUrl, String journeyID) {
         this.title = title;
         this.imgUrl = imgUrl;
+        this.journeyID = journeyID;
     }
 
     public String getTitle() {
@@ -27,4 +32,14 @@ public class Data {
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
     }
+
+    public String getJourneyID() {
+        return journeyID;
+    }
+
+    public void setJourneyID(String journeyID) {
+        this.journeyID = journeyID;
+    }
+
+
 }

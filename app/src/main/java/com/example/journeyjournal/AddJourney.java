@@ -5,13 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -31,7 +34,12 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
     String jDescription;
     String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-    FirebaseFirestore fStore;
+    FirebaseFirestore fStore = FirebaseFirestore.getInstance();
+
+    DocumentReference docRef = fStore.collection("users").document(userID).collection("journeys").document();
+
+
+
 
 
 
@@ -40,10 +48,17 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_journey);
 
-        fStore = FirebaseFirestore.getInstance();
+
+
+
+
+
+
 
         title = (EditText) findViewById(R.id.title);
         description = (EditText) findViewById(R.id.description);
+
+
 
         add = (Button) findViewById(R.id.add);
         add.setOnClickListener(this);
@@ -67,13 +82,18 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
 
         data.put("title", jTitle);
         data.put("description", jDescription);
+        data.put("journeyID", null);
 
-        fStore.collection("users").document(userID).collection("journeys").add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        fStore.collection("users").document(userID).collection("journeys").add(data)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 Toast.makeText(AddJourney.this, "Successfully added journey!", Toast.LENGTH_SHORT);
                 Intent intent = new Intent(AddJourney.this, HomePage.class);
                 startActivity(intent);
+
+                fStore.collection("users").document(userID).collection("journeys").document(documentReference.getId()).update("journeyID", documentReference.getId());
+
             }
         }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -81,8 +101,4 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
                         Toast.makeText(AddJourney.this, "Failed to add data", Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
-
-    }
-}
+}}
