@@ -1,6 +1,7 @@
 package com.example.journeyjournal;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.LabeledIntent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,7 +61,20 @@ public class Adapter extends ArrayAdapter<Data> {
             @Override
             public void onClick(View view) {
 
-               Toast.makeText(getContext(), "ID: " + data.getJourneyID() , Toast.LENGTH_LONG).show();
+               String title = data.getTitle();
+               String description = data.getDescription();
+               String journeyID = data.getJourneyID();
+               String imgUrl = data.getImgUrl();
+
+               Intent intent = new Intent(getContext(), EditJourney.class);
+               intent.putExtra("title", title);
+               intent.putExtra("description", description);
+               intent.putExtra("journeyID", journeyID);
+               intent.putExtra("imgUrl", imgUrl);
+
+               getContext().startActivity(intent);
+
+
             }
         });
 

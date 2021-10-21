@@ -10,17 +10,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JourneyJournal">
         <activity
+            android:name=".EditJourney"
+            android:exported="false" />
+        <activity
             android:name=".AddJourney"
             android:exported="false"
-            android:label="Add Journey"/>
+            android:label="Add Journey" />
         <activity
             android:name=".HomePage"
             android:exported="false"
-            android:label="Journal Feed"/>
+            android:label="Journal Feed" />
         <activity
             android:name=".RegisterUser"
-            android:label="Register Traveller"
-            android:exported="false" />
+            android:exported="false"
+            android:label="Register Traveller" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

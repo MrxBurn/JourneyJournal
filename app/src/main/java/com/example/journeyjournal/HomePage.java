@@ -140,9 +140,6 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                                 Data data = d.toObject(Data.class);
 
                                 dataArrayList.add(data);
-
-                                Log.d( "JourneyData", "ID " + d.getId() + " " + d.getData());
-                                //Todo: Try and assign ID to each item in ListView
                             }
 
                             Adapter adapter = new Adapter(HomePage.this, dataArrayList);

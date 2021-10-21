@@ -6,6 +6,9 @@ public class Data {
 
 
 
+    private String description;
+
+
     private String journeyID;
 
 
@@ -39,6 +42,14 @@ public class Data {
 
     public void setJourneyID(String journeyID) {
         this.journeyID = journeyID;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 
