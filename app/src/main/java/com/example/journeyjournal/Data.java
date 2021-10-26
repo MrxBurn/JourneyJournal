@@ -3,12 +3,7 @@ package com.example.journeyjournal;
 public class Data {
     private String title;
     private String imgUrl;
-
-
-
     private String description;
-
-
     private String journeyID;
 
 

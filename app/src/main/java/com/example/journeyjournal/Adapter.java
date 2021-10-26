@@ -29,10 +29,6 @@ import java.util.ArrayList;
 
 public class Adapter extends ArrayAdapter<Data> {
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-
     public Adapter(@NonNull Context context, ArrayList<Data> dataArrayList) {
         super(context, 0, dataArrayList);
     }
@@ -82,4 +78,7 @@ public class Adapter extends ArrayAdapter<Data> {
 
         return listitemView;
     }
+
+
+
 }

@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -88,7 +89,8 @@ public class EditJourney extends AppCompatActivity implements View.OnClickListen
         //Get the data from intent in the views
         editTextTitle.setText(jTitle);
         editTextDescription.setText(jDescription);
-        //Todo: add the image functionality
+
+        Picasso.get().load(jImgUrl).into(imageViewImage);
 
 
 

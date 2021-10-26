@@ -1,10 +1,16 @@
 package com.example.journeyjournal;
 
+import static com.example.journeyjournal.AddJourney.CODE;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,9 +25,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -39,11 +49,6 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
     private DocumentReference docRef = db.collection("users").document(userID);
-
-
-    TextView textView;
-
-
 
 
     ListView listView;
@@ -64,22 +69,18 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         signOut.setOnClickListener(this);
         add_journey.setOnClickListener(this);
 
-        listView = findViewById(R.id.listView);
-        dataArrayList = new ArrayList<>();
+        dataArrayList = new ArrayList<Data>();
+
+        listView = (ListView) findViewById(R.id.listView);
+
+
 
         loadDataInListView();
        // loadName();
 
 
-        textView = findViewById(R.id.textView);
-
 
     }
-
-
-
-
-
 
 
     @Override
@@ -126,6 +127,8 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
     }*/
 
+
+
     private void loadDataInListView() {
         db.collection("users").document(userID).collection("journeys").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -164,8 +167,4 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
 
     }
-
-
-
-
 }
