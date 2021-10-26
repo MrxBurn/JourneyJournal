@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.Image;
@@ -47,6 +48,7 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
     String jDescription;
     String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
     public static int CODE = 2;
+    static String defIMG = "https://images.unsplash.com/photo-1590272456521-1bbe160a18ce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTh8fHxlbnwwfHx8fA%3D%3D&w=1000&q=80";
 
 
     FirebaseFirestore fStore = FirebaseFirestore.getInstance();
@@ -55,6 +57,8 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
     private StorageReference storageReference;
     StorageReference filepath;
     Uri uri;
+
+
 
     DocumentReference docRef = fStore.collection("users").document(userID).collection("journeys").document();
 
@@ -92,9 +96,9 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
         switch (view.getId()) {
             case R.id.add:
                 addJourney();
-                Intent intent = new Intent(AddJourney.this, HomePage.class);
-                intent.setFlags(0);
-                startActivityForResult(intent, 78);
+                Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_OK, returnIntent);
+                finish();
                 break;
             case R.id.upload_camera:
                 imgCamera();
@@ -144,8 +148,10 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
                     break;
 
                 }
+
         }
     }
+
 
 
     private void addJourney() {
@@ -158,7 +164,7 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
         data.put("title", jTitle);
         data.put("description", jDescription);
         data.put("journeyID", null);
-        data.put("imgUrl", null);
+        data.put("imgUrl", defIMG);
 
         fStore.collection("users").document(userID).collection("journeys").add(data)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -166,18 +172,25 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
                     public void onSuccess(DocumentReference documentReference) {
                         Toast.makeText(AddJourney.this, "Successfully added journey!", Toast.LENGTH_SHORT);
 
+                        fStore.collection("users").document(userID).collection("journeys").document(documentReference.getId()).update("journeyID", documentReference.getId());
+
                         filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
-                                        fStore.collection("users").document(userID).collection("journeys").document(documentReference.getId()).update(
-                                                "imgUrl", uri.toString(),
-                                                "journeyID", documentReference.getId());
+                                        fStore.collection("users").document(userID).collection("journeys").document(documentReference.getId()).update("imgUrl", uri.toString());
+
+
+
                                     }
+
+
                                 });
                             }
+
+
                         });
 
 

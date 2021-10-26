@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,6 +35,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +52,15 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
     private DocumentReference docRef = db.collection("users").document(userID);
 
+    static int CODE = 2;
 
-    ListView listView;
+
+    RecyclerView recyclerView;
     ArrayList<Data> dataArrayList;
+
+    CustomAdapter adapter;
+
+
 
 
 
@@ -62,26 +70,39 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         setContentView(R.layout.activity_home_page);
 
 
-
+        Button refresh = (Button) findViewById(R.id.refresh);
+        refresh.setOnClickListener(this);
 
         Button signOut = (Button) findViewById(R.id.signOut);
         Button add_journey = (Button) findViewById(R.id.add_journey);
         signOut.setOnClickListener(this);
         add_journey.setOnClickListener(this);
 
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         dataArrayList = new ArrayList<Data>();
 
-        listView = (ListView) findViewById(R.id.listView);
+        adapter = new CustomAdapter(HomePage.this, dataArrayList);
+
+        recyclerView.setAdapter(adapter);
 
 
 
-        loadDataInListView();
+
+
        // loadName();
 
 
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadDataInListView();
+    }
 
     @Override
     public void onClick(View view) {
@@ -93,8 +114,14 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 break;
             case R.id.add_journey:
                 Intent intent_add = new Intent(HomePage.this, AddJourney.class);
-                startActivity(intent_add);
+                startActivityForResult(intent_add, CODE);
                 break;
+
+            case R.id.refresh:
+                overridePendingTransition(0,0);
+                Intent i = new Intent(HomePage.this, HomePage.class);
+                overridePendingTransition(0,0);
+                startActivity(i);
         }
     }
 
@@ -130,41 +157,51 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
 
     private void loadDataInListView() {
-        db.collection("users").document(userID).collection("journeys").get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+        db.collection("users").document(userID).collection("journeys").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
 
+                if (error != null){
+                    Log.d("Error", error.getMessage());
+                    return;
+                }
 
-                        if(!queryDocumentSnapshots.isEmpty()){
-                            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                for(DocumentChange dc : value.getDocumentChanges()){
 
-                            for(DocumentSnapshot d : list){
-                                Data data = d.toObject(Data.class);
+                    if(dc.getType() == DocumentChange.Type.ADDED){
 
-                                dataArrayList.add(data);
-                            }
-
-                            Adapter adapter = new Adapter(HomePage.this, dataArrayList);
-
-                            listView.setAdapter(adapter);
-
-
-
-                        } else {
-                            Toast.makeText(HomePage.this, "No data found in database", Toast.LENGTH_SHORT).show();
-                        }
-
-
+                        dataArrayList.add(dc.getDocument().toObject(Data.class));
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(HomePage.this, "Fail to load data..", Toast.LENGTH_SHORT).show();
-                    }
-                });
+
+                    adapter.notifyDataSetChanged();
+
+                }
+
+            }
+        });
 
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == CODE){
+            if(resultCode == Activity.RESULT_OK){
+
+                Intent intent = new Intent(HomePage.this, HomePage.class);
+                finish();
+                startActivity(intent);
+                Log.d("REQUESTCODE", "success");
+
+
+
+            }
+            else {
+                Toast.makeText(HomePage.this, "Error!!!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 }

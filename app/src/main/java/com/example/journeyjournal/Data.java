@@ -1,10 +1,10 @@
 package com.example.journeyjournal;
 
 public class Data {
-    private String title;
-    private String imgUrl;
-    private String description;
-    private String journeyID;
+     String title;
+     String imgUrl;
+     String description;
+     String journeyID;
 
 
     public Data(){}
