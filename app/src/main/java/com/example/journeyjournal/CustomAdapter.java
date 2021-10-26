@@ -39,6 +39,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         Data data = dataArrayList.get(position);
 
         holder.jTitle.setText(data.title);
+
+
+
         Picasso.get().load(data.imgUrl).into(holder.jImage);
 
 

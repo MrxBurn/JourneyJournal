@@ -44,7 +44,6 @@ import java.util.Map;
 public class HomePage extends AppCompatActivity implements View.OnClickListener {
 
 
-
     private static final String KEY_FIRSTNAME = "firstName";
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -59,9 +58,6 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     ArrayList<Data> dataArrayList;
 
     CustomAdapter adapter;
-
-
-
 
 
     @Override
@@ -89,24 +85,18 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         recyclerView.setAdapter(adapter);
 
 
-
-
-
-       // loadName();
-
-
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
         loadDataInListView();
+
+
+        // loadName();
+
+
     }
+
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.signOut:
                 Intent intent_signOut = new Intent(HomePage.this, MainActivity.class);
                 FirebaseAuth.getInstance().signOut();
@@ -118,9 +108,9 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 break;
 
             case R.id.refresh:
-                overridePendingTransition(0,0);
+                overridePendingTransition(0, 0);
                 Intent i = new Intent(HomePage.this, HomePage.class);
-                overridePendingTransition(0,0);
+                overridePendingTransition(0, 0);
                 startActivity(i);
         }
     }
@@ -155,25 +145,31 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     }*/
 
 
-
     private void loadDataInListView() {
         db.collection("users").document(userID).collection("journeys").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
 
-                if (error != null){
+                if (error != null) {
                     Log.d("Error", error.getMessage());
                     return;
                 }
 
-                for(DocumentChange dc : value.getDocumentChanges()){
+                for (DocumentChange dc : value.getDocumentChanges()) {
 
-                    if(dc.getType() == DocumentChange.Type.ADDED){
-
+                    if (dc.getType() == DocumentChange.Type.ADDED) {
                         dataArrayList.add(dc.getDocument().toObject(Data.class));
                     }
 
+                    if (dc.getType() == DocumentChange.Type.MODIFIED) {
+                        overridePendingTransition(0, 0);
+                        startActivity(getIntent());
+                        overridePendingTransition(0, 0);
+                        finish();
+                    }
+
                     adapter.notifyDataSetChanged();
+
 
                 }
 
@@ -182,26 +178,4 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
 
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == CODE){
-            if(resultCode == Activity.RESULT_OK){
-
-                Intent intent = new Intent(HomePage.this, HomePage.class);
-                finish();
-                startActivity(intent);
-                Log.d("REQUESTCODE", "success");
-
-
-
-            }
-            else {
-                Toast.makeText(HomePage.this, "Error!!!", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
 }

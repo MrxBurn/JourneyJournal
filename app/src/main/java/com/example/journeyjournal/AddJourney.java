@@ -5,6 +5,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.Image;
@@ -38,8 +40,8 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
     private EditText title;
     private EditText description;
     private ImageView journeyIMG;
-    private Button uploadCamera;
-    private Button uploadGallery;
+    private Button uploadOption;
+
 
 
     private Button add;
@@ -48,8 +50,7 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
     String jDescription;
     String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
     public static int CODE = 2;
-    static String defIMG = "https://images.unsplash.com/photo-1590272456521-1bbe160a18ce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTh8fHxlbnwwfHx8fA%3D%3D&w=1000&q=80";
-
+    String imgURL = null;
 
     FirebaseFirestore fStore = FirebaseFirestore.getInstance();
 
@@ -57,6 +58,10 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
     private StorageReference storageReference;
     StorageReference filepath;
     Uri uri;
+
+    String [] options = {"Camera", "Gallery"};
+
+    AlertDialog.Builder builder;
 
 
 
@@ -69,6 +74,8 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
         setContentView(R.layout.activity_add_journey);
 
 
+        builder = new AlertDialog.Builder(this);
+
         title = (EditText) findViewById(R.id.title);
         description = (EditText) findViewById(R.id.description);
         journeyIMG = (ImageView) findViewById(R.id.image);
@@ -77,11 +84,8 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
         add = (Button) findViewById(R.id.add);
         add.setOnClickListener(this);
 
-        uploadCamera = (Button) findViewById(R.id.upload_camera);
-        uploadCamera.setOnClickListener(this);
-
-        uploadGallery = (Button) findViewById(R.id.upload_gallery);
-        uploadGallery.setOnClickListener(this);
+        uploadOption = (Button) findViewById(R.id.uploadOption);
+        uploadOption.setOnClickListener(this);
 
 
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -100,28 +104,33 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
                 break;
-            case R.id.upload_camera:
-                imgCamera();
-
-
+            case R.id.uploadOption:
+                pickOption();
                 break;
-            case R.id.upload_gallery:
-                imgGallery();
+
         }
 
 
     }
 
-    private void imgGallery() {
-        Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(pickPhoto, 0);
+    private void pickOption() {
 
+        builder.setTitle("Select option");
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(which == 0 ){
+                    Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(takePicture, 1);
+                }
+                else {
+                    Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(pickPhoto, 0);
+                }
+            }
+        });
 
-    }
-
-    private void imgCamera() {
-        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(takePicture, 1);
+        builder.show();
     }
 
     @Override
@@ -145,6 +154,8 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
 
                     filepath = storageReference.child(userID).child(uri.getLastPathSegment());
 
+
+
                     break;
 
                 }
@@ -164,15 +175,7 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
         data.put("title", jTitle);
         data.put("description", jDescription);
         data.put("journeyID", null);
-        data.put("imgUrl", defIMG);
-
-        fStore.collection("users").document(userID).collection("journeys").add(data)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(AddJourney.this, "Successfully added journey!", Toast.LENGTH_SHORT);
-
-                        fStore.collection("users").document(userID).collection("journeys").document(documentReference.getId()).update("journeyID", documentReference.getId());
+        data.put("imgUrl", imgURL);
 
                         filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
@@ -180,13 +183,15 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
                                 filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
-                                        fStore.collection("users").document(userID).collection("journeys").document(documentReference.getId()).update("imgUrl", uri.toString());
+                                        fStore.collection("users").document(userID).collection("journeys").add(data)
+                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentReference documentReference) {
+                                                        Toast.makeText(AddJourney.this, "Successfully added journey!", Toast.LENGTH_SHORT);
 
-
-
+                                                        fStore.collection("users").document(userID).collection("journeys").document(documentReference.getId()).update("journeyID", documentReference.getId(),
+                                                                "imgUrl", uri.toString());
                                     }
-
-
                                 });
                             }
 
