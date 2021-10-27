@@ -51,8 +51,6 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
     private DocumentReference docRef = db.collection("users").document(userID);
 
-    static int CODE = 2;
-
 
     RecyclerView recyclerView;
     ArrayList<Data> dataArrayList;
