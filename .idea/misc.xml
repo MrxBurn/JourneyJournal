@@ -3,7 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Anul 3/Other Modules/Android Mobile Development/JourneyJournal/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.5703125" />
+        <entry key="..\:/Anul 3/Other Modules/Android Mobile Development/JourneyJournal/app/src/main/res/drawable/ic_launcher_background.xml" value="0.5703125" />
         <entry key="..\:/Anul 3/Other Modules/Android Mobile Development/JourneyJournal/app/src/main/res/layout/activity_add_journey.xml" value="0.5541666666666667" />
+        <entry key="..\:/Anul 3/Other Modules/Android Mobile Development/JourneyJournal/app/src/main/res/layout/activity_edit_journey.xml" value="0.5541666666666667" />
+        <entry key="..\:/Anul 3/Other Modules/Android Mobile Development/JourneyJournal/app/src/main/res/layout/activity_home_page.xml" value="0.5541666666666667" />
+        <entry key="..\:/Anul 3/Other Modules/Android Mobile Development/JourneyJournal/app/src/main/res/layout/item.xml" value="0.5541666666666667" />
+        <entry key="..\:/Anul 3/Other Modules/Android Mobile Development/JourneyJournal/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.5703125" />
         <entry key="..\:/Anul 3/Other Modules/Android Mobile Development/JourneyJournal1/app/src/main/res/layout/activity_add_journey.xml" value="0.5541666666666667" />
         <entry key="..\:/Anul 3/Other Modules/Android Mobile Development/JourneyJournal1/app/src/main/res/layout/activity_edit_journey.xml" value="0.5541666666666667" />
         <entry key="..\:/Anul 3/Other Modules/Android Mobile Development/JourneyJournal1/app/src/main/res/layout/activity_home_page.xml" value="0.5456410256410257" />

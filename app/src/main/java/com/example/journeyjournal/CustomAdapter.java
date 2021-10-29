@@ -74,6 +74,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         TextView jTitle;
         ImageView jImage;
 
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 

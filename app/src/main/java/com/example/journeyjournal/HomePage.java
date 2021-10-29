@@ -64,8 +64,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         setContentView(R.layout.activity_home_page);
 
 
-        Button refresh = (Button) findViewById(R.id.refresh);
-        refresh.setOnClickListener(this);
+
 
         Button signOut = (Button) findViewById(R.id.signOut);
         Button add_journey = (Button) findViewById(R.id.add_journey);
@@ -105,11 +104,6 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 startActivityForResult(intent_add, CODE);
                 break;
 
-            case R.id.refresh:
-                overridePendingTransition(0, 0);
-                Intent i = new Intent(HomePage.this, HomePage.class);
-                overridePendingTransition(0, 0);
-                startActivity(i);
         }
     }
 
