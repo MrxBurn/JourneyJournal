@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -24,6 +25,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
@@ -41,7 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class HomePage extends AppCompatActivity implements View.OnClickListener {
+public class HomePage extends AppCompatActivity {
 
 
     private static final String KEY_FIRSTNAME = "firstName";
@@ -57,6 +60,9 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
     CustomAdapter adapter;
 
+    BottomNavigationView navBar;
+    TextView welcome;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +70,10 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         setContentView(R.layout.activity_home_page);
 
 
+        welcome = (TextView) findViewById(R.id.welcome);
 
+        navBar = (BottomNavigationView) findViewById(R.id.navBar);
 
-        Button signOut = (Button) findViewById(R.id.signOut);
-        Button add_journey = (Button) findViewById(R.id.add_journey);
-        signOut.setOnClickListener(this);
-        add_journey.setOnClickListener(this);
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -85,30 +89,41 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         loadDataInListView();
 
 
-        // loadName();
+        loadName();
+
+        navBar.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.page_1:
+                        Intent intent_add = new Intent(HomePage.this, AddJourney.class);
+                        startActivityForResult(intent_add, CODE);
+                        break;
+
+                    case R.id.page_2:
+                        Intent intent_signOut = new Intent(HomePage.this, MainActivity.class);
+                        FirebaseAuth.getInstance().signOut();
+                        startActivity(intent_signOut);
+                        break;
+
+                }
+
+            return true;
+            }
+
+        });
+
+
+
 
 
     }
 
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.signOut:
-                Intent intent_signOut = new Intent(HomePage.this, MainActivity.class);
-                FirebaseAuth.getInstance().signOut();
-                startActivity(intent_signOut);
-                break;
-            case R.id.add_journey:
-                Intent intent_add = new Intent(HomePage.this, AddJourney.class);
-                startActivityForResult(intent_add, CODE);
-                break;
-
-        }
-    }
 
 
-  /*  private void loadName() {
+
+    private void loadName() {
         docRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -116,7 +131,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                         if(documentSnapshot.exists()){
                             String firstName = documentSnapshot.getString(KEY_FIRSTNAME);
 
-                            //Todo: add welcome and name
+                            welcome.setText("Welcome " + firstName + "!");
 
 
                         }
@@ -129,12 +144,12 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(HomePage.this, "No data on this user", Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, e.toString());
+                        Log.d("No name", e.toString());
                     }
                 });
 
 
-    }*/
+    }
 
 
     private void loadDataInListView() {
