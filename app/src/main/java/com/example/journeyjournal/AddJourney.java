@@ -47,6 +47,7 @@ import java.util.Map;
 
 public class AddJourney extends AppCompatActivity implements View.OnClickListener {
 
+    //Variables
     private EditText title;
     private EditText description;
     private ImageView journeyIMG;
@@ -57,11 +58,14 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
 
     String jTitle;
     String jDescription;
+    //Get current userID
     String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
     public static int CODE = 2;
     String imgURL = null;
 
     FirebaseFirestore fStore = FirebaseFirestore.getInstance();
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
 
 
     private StorageReference storageReference;
@@ -84,6 +88,8 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_journey);
 
+
+        //Instantiate all the required elements
 
         builder = new AlertDialog.Builder(this);
 
@@ -115,6 +121,8 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
 
     private void pickOption() {
 
+        //Select uploading image from gallery or camera
+
         builder.setTitle("Select option");
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
@@ -137,6 +145,7 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        //If Gallery was selected -> upload all the data
         switch (requestCode) {
             case 0:
                 if (resultCode == RESULT_OK) {
@@ -148,14 +157,17 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
                     jTitle = title.getText().toString();
                     jDescription = description.getText().toString();
 
-
+                    //HashMap to hold all the data
                     Map<String, String> journey = new HashMap<>();
 
                     journey.put("title", jTitle);
                     journey.put("description", jDescription);
                     journey.put("journeyID", null);
                     journey.put("imgUrl", imgURL);
+                    journey.put("date_time", dateFormat.format(new Date()));
 
+
+                    //Upload image including the other relevant data
                     filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -181,6 +193,8 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
                     });
                     break;
                 }
+
+                //If Camera was selected -> start uploading
             case 1:
                 if (resultCode == RESULT_OK) {
 
@@ -196,13 +210,14 @@ public class AddJourney extends AppCompatActivity implements View.OnClickListene
                     jTitle = title.getText().toString();
                     jDescription = description.getText().toString();
 
-
+                    //HashMap to hold the data
                     Map<String, String> journey = new HashMap<>();
 
                     journey.put("title", jTitle);
                     journey.put("description", jDescription);
                     journey.put("journeyID", null);
                     journey.put("imgUrl", imgURL);
+                    journey.put("date_time", dateFormat.format(new Date()));
 
                     byte[] b = stream.toByteArray();
 

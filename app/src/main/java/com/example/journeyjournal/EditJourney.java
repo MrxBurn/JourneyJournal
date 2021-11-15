@@ -203,7 +203,7 @@ public class EditJourney extends AppCompatActivity implements View.OnClickListen
 
             }
         });
-
+        //If the choice was gallery -> upload the new image and display it
         if (choice == "gallery") {
             filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -219,6 +219,7 @@ public class EditJourney extends AppCompatActivity implements View.OnClickListen
                 }
             });
         }
+        //If choice is camera -> upload the image from camera
         else if (choice == "camera"){
             filepath.putBytes(b).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -238,6 +239,7 @@ public class EditJourney extends AppCompatActivity implements View.OnClickListen
 
     }
 
+    //Share functionality
     private void shareJourney() {
 
         Intent shareIntent = new Intent();
@@ -309,5 +311,6 @@ public class EditJourney extends AppCompatActivity implements View.OnClickListen
                 }
         }
     }
+
 }
 

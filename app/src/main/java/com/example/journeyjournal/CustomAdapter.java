@@ -41,6 +41,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         Data data = dataArrayList.get(position);
 
         holder.jTitle.setText(data.title);
+        holder.jDate.setText(data.date_time);
+
 
 
 
@@ -50,6 +52,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             @Override
             public void onClick(View v) {
 
+                //Send the relevant data to the Edit Activity
                 Intent i = new Intent(v.getContext(), EditJourney.class);
                 i.putExtra("title", data.getTitle());
                 i.putExtra("description", data.getDescription());
@@ -73,6 +76,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
         TextView jTitle;
         ImageView jImage;
+        TextView jDate;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -80,6 +84,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
             jTitle = itemView.findViewById(R.id.journey_title);
             jImage = itemView.findViewById(R.id.image);
+            jDate = itemView.findViewById(R.id.date);
 
 
         }

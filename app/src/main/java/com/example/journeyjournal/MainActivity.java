@@ -24,6 +24,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+
+    //Variables & Firebase
     private TextView register;
     private Button signIn;
 
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        //Variable instantiation
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
         progressDialog = new ProgressDialog(this);
@@ -78,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String email = editTextEmail.getText().toString();
         String password = editTextPassword.getText().toString();
 
+        //Text fields validation
         if(email.isEmpty()){
             editTextEmail.setError("Fill in email");
             editTextEmail.requestFocus();
@@ -96,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
 
+            //Sign in the user functionality
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {

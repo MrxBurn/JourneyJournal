@@ -33,6 +33,7 @@ import java.util.regex.Pattern;
 
 public class RegisterUser extends AppCompatActivity implements View.OnClickListener {
 
+    //Variables & Firebase
     private TextView banner, registerUser;
     private EditText editTextFirstName, editTextEmail, editTextPassword;
     ProgressDialog progressDialog;
@@ -50,6 +51,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_user);
 
+        //Variable Instantiation
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         firestore = FirebaseFirestore.getInstance();
@@ -80,6 +82,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    //Register user functionality
     private void registerUser() {
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
@@ -114,6 +117,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
 
+            //Create account functionality
             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -153,7 +157,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
 
 
     }
-
+    //Send the user to main page after registering
     private void sendUserToHome() {
         Intent intent = new Intent(RegisterUser.this, HomePage.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);

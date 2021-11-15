@@ -46,7 +46,7 @@ import java.util.Map;
 
 public class HomePage extends AppCompatActivity {
 
-
+    //Variables & Firebase
     private static final String KEY_FIRSTNAME = "firstName";
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -69,7 +69,7 @@ public class HomePage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
 
-
+        //Instantiate variables
         welcome = (TextView) findViewById(R.id.welcome);
 
         navBar = (BottomNavigationView) findViewById(R.id.navBar);
@@ -122,7 +122,7 @@ public class HomePage extends AppCompatActivity {
 
 
 
-
+    //Load the user's name functionality
     private void loadName() {
         docRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -151,7 +151,7 @@ public class HomePage extends AppCompatActivity {
 
     }
 
-
+    //Load all the journeys in the list
     private void loadDataInListView() {
         db.collection("users").document(userID).collection("journeys").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override

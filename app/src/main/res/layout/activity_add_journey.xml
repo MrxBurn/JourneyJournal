@@ -6,9 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".AddJourney">
 
+    <!-- Let the user add the title -->
     <EditText
         android:id="@+id/title"
-        android:layout_width="380dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:hint="Journey's Title"
         android:textSize="24sp"
@@ -19,9 +20,10 @@
 
     </EditText>
 
+    <!-- Let the user add the description of the journey -->
     <EditText
         android:id="@+id/description"
-        android:layout_width="380dp"
+        android:layout_width="300dp"
         android:layout_height="200sp"
         android:hint="Your thoughts about the journey"
         android:textSize="24sp"
@@ -33,7 +35,7 @@
     </EditText>
 
 
-
+    <!-- Display the uploaded image -->
     <ImageView
         android:id="@+id/image"
         android:layout_width="250dp"
@@ -43,12 +45,13 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/description"/>
 
+    <!-- Upload image -->
     <Button
         android:id="@+id/uploadOption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Upload Journey"
+        android:text="Upload Image &amp; Journey"
         android:textSize="20dp"
         android:backgroundTint="#0ED6B9"
         app:layout_constraintTop_toBottomOf="@id/image"
