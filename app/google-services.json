@@ -1,47 +1,27 @@
 {
   "project_info": {
     "project_number": "1006170973998",
+    "firebase_url": "https://joureyjournal-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "joureyjournal",
     "storage_bucket": "joureyjournal.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1006170973998:android:8175118d3cbdc5e7bdfcbf",
+        "mobilesdk_app_id": "1:1006170973998:android:5e0b4d8d4a522739bdfcbf",
         "android_client_info": {
           "package_name": "com.example.journeyjournal"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1006170973998-ba8b2fcaj1u9qn140p0c5gdr4kce3ail.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBRtpV-5RCYzIW2xvN2rTZumSf1V7pZoYg"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "1006170973998-ba8b2fcaj1u9qn140p0c5gdr4kce3ail.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:1006170973998:android:5e0b4d8d4a522739bdfcbf",
-        "android_client_info": {
-          "package_name": "com.example.journeyjournal1"
-        }
-      },
-      "oauth_client": [
+          "client_id": "1006170973998-d2eql0e7f3s73va9l0001o8emnnrdt1v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.journeyjournal",
+            "certificate_hash": "84822aa25e1185a0f400ea51726bc29a8e9941a8"
+          }
+        },
         {
           "client_id": "1006170973998-ba8b2fcaj1u9qn140p0c5gdr4kce3ail.apps.googleusercontent.com",
           "client_type": 3
